@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import styles from "./LandingPage.module.css";
 import avatar1 from "../../assets/WomanWearingPinkCollaredHalfSleevedTop1036623.jpeg";
@@ -14,6 +14,7 @@ import messageIcon from "../../assets/message.svg";
 import { ReactComponent as GoogleLogo } from "../../assets/FlatColorIconsgoogle18_x2.svg"; // Import SVG as React component
 import { ReactComponent as PhoneIcon } from "../../assets/Group6_x2.svg"; // Import SVG as React component
 import axios from "axios";
+import { AuthContext } from "../../StateManagement/AuthContext";
 const avatars = [
     { src: avatar1, top: "20%", left: "-2%" },
     { src: avatar2, top: "1%", left: "70%" },
@@ -27,7 +28,8 @@ const avatars = [
     { src: messageIcon, top: "91%", left: "30%" },
 ];
 
-const LandingPage = ({ setIsLoggedIn }) => {
+const LandingPage = () => {
+    const { setIsLoggedIn,isLoggedIn, logout } = useContext(AuthContext);
     const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [error, setError] = useState("");
@@ -111,7 +113,7 @@ const LandingPage = ({ setIsLoggedIn }) => {
     };
 
     const handleLogin = async (e) => {
-        e.stopPropagation()
+        e.preventDefault(); 
         setError("");
         console.log("Login attempt with:", email, password);
         if (!email || !password) {
@@ -126,7 +128,6 @@ const LandingPage = ({ setIsLoggedIn }) => {
                 console.log("login successful");
                 setIsLoggedIn(true);
                 navigate('/userhome');
-                // window.location.href = "/userhome"; 
             } else {
                 setError("Invalid email or password.");
                 console.log("Error message:", error);
@@ -137,6 +138,8 @@ const LandingPage = ({ setIsLoggedIn }) => {
             setError(errorMessage);
         }
     };
+    console.log("nkjkhkjh",isLoggedIn);
+    
     
     return (
         <div className={styles.container}>

@@ -32,7 +32,7 @@ const Sent = () => {
             });
 
             if (response.status === 200) {
-                const data = response.data[0]; 
+                const data = response.data; 
                 setUsers(data); 
             }
         } catch (error) {

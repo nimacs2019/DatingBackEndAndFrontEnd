@@ -6,29 +6,42 @@ const User = require("../database/dating_models/userDataSchema");
 const authenticateToken = require("../Middlewares/jwtAuth");
 
 router.post("/api/accept-request", authenticateToken, async (req, res) => {
-    const { notificationID } = req.body;
+    const { senderID } = req.body;
+    const receiverID = req.user;
+    console.log("notification ids ", senderID, receiverID);
 
     try {
-        const updatedNotification = await NotificationModel.findByIdAndUpdate(
-            notificationID,
+        // Find and update the notification status to 'accepted'
+        const updatedNotification = await NotificationModel.findOneAndUpdate(
+            {
+                sender: senderID,
+                receiver: receiverID,
+                status: "pending",
+            },
             { status: "accepted" },
             { new: true }
         );
+
         if (!updatedNotification) {
             return res.status(404).json({ error: "Notification not found" });
         }
-        let requestUpdate;
-        requestUpdate = await RequestModel.findOneAndUpdate(
-            { sender: updatedNotification.sender, receiver: updatedNotification.receiver, request: requestUpdate },
+
+        // Find and update the corresponding request status to 'accepted'
+        const requestUpdate = await RequestModel.findOneAndUpdate(
+            {
+                sender: senderID,
+                receiver: receiverID,
+            },
             { status: "accepted" },
             { new: true }
         );
+
         if (!requestUpdate) {
             return res.status(404).json({ error: "Request not found" });
         }
 
         res.status(200).json({
-            message: "Notification accepted successfully",
+            message: "Request accepted successfully",
             notification: updatedNotification,
             request: requestUpdate,
         });
@@ -39,17 +52,26 @@ router.post("/api/accept-request", authenticateToken, async (req, res) => {
 });
 
 router.post("/api/reject-request", authenticateToken, async (req, res) => {
-    const { notificationID } = req.body;
+    const { senderID } = req.body;
+    const receiverID = req.user;
+    console.log("notification ids ", senderID, receiverID);
 
     try {
-        const updatedNotification = await NotificationModel.findByIdAndUpdate(
-            notificationID,
+        const updatedNotification = await NotificationModel.findOneAndUpdate(
+            {
+                sender: senderID,
+                receiver: receiverID,
+                status: "pending",
+            },
             { status: "rejected" },
             { new: true }
         );
 
         const requestUpdate = await RequestModel.findOneAndUpdate(
-            { sender: updatedNotification.sender, receiver: updatedNotification.receiver },
+            {
+                sender: senderID,
+                receiver: receiverID,
+            },
             { status: "rejected" },
             { new: true }
         );
@@ -58,10 +80,14 @@ router.post("/api/reject-request", authenticateToken, async (req, res) => {
             return res.status(404).json({ error: "Notification not found" });
         }
 
-        res.status(200).json({ message: "Notification rejected", notification: updatedNotification });
+        res.status(200).json({
+            message: "Request Rejected ...! ",
+            notification: updatedNotification,
+            request: requestUpdate,
+        });
     } catch (error) {
-        console.error("Error accepting notification:", error);
-        res.status(500).json({ error: "Error accepting notification" });
+        console.error("Error rejecting notification:", error);
+        res.status(500).json({ error: "Error rejecting notification" });
     }
 });
 

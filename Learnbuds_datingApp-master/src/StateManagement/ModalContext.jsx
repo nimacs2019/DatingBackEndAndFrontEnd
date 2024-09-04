@@ -13,6 +13,8 @@ const ModalProvider = ({ children }) => {
         setIsModalOpen((prev) => !prev);
     };
 
+    console.log("right side model ", isModalOpen);
+
     // Function to change the page name and close the modal
     const handlePageNameChange = (name) => {
         setPageName(name);
@@ -21,7 +23,7 @@ const ModalProvider = ({ children }) => {
 
     // Provide context values to children components
     return (
-         <ModalContext.Provider value={{ isModalOpen, pageName, toggleModal, handlePageNameChange }}> 
+        <ModalContext.Provider value={{ isModalOpen, pageName, toggleModal, handlePageNameChange }}>
             {children}
         </ModalContext.Provider>
     );
@@ -29,32 +31,3 @@ const ModalProvider = ({ children }) => {
 
 // Export the context and provider
 export { ModalContext, ModalProvider };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

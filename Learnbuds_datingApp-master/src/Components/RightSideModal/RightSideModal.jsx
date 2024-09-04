@@ -1,38 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./RightSideModal.module.css";
 import { ModalContext } from "../../StateManagement/ModalContext";
 import { ProfileContext } from "../../StateManagement/ProfileContext";
-import Cookies from "js-cookie";
+import { AuthContext } from "../../StateManagement/AuthContext";
 
 const RightSideModal = () => {
     const { isModalOpen, toggleModal } = useContext(ModalContext);
     const { profileData } = useContext(ProfileContext);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const profilePicture = profileData?.profilePicture;
     const correctedPath = profilePicture ? profilePicture.replace(/^\.\.\//, "uploads/") : "";
     const profilePictureUrl = correctedPath ? `http://localhost:8080/${correctedPath.replace(/\\/g, "/")}` : "";
 
-    const checkAuthStatus = () => {
-        const connectionId = Cookies.get("connect.sid");
-        const userToken = Cookies.get("jwt");
-
-        setIsLoggedIn(!!connectionId || !!userToken);
-    };
-
     const handleLogout = () => {
-        Cookies.remove("connect.sid");
-        Cookies.remove("jwt");
-
-        setIsLoggedIn(false);
+        logout();
         navigate("/");
     };
-    useEffect(() => {
-        checkAuthStatus();
-    }, []);
+    console.log("login in ", isLoggedIn);
+
     return (
         <>
             {isLoggedIn && isModalOpen && <div className={styles.overlay} onClick={toggleModal}></div>}

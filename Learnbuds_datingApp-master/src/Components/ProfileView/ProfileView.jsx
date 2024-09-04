@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "./ProfileView.module.css";
 import backgroundImage from "../../assets/ladyImage1.jpg";
 import upgradeView from "../UpgradeView/UpgradeView";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { NotificationContext } from "../../StateManagement/NotificationContext";
 
 const ProfileView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [userProfileData, setUserProfileData] = useState(null);
+    const { setReqNotifications, reqNotifications, setHasRequests, hasRequests, checkForRequests } =
+        useContext(NotificationContext);
 
     const getSelectedUserProfile = async () => {
         try {
@@ -24,9 +27,10 @@ const ProfileView = () => {
 
     useEffect(() => {
         getSelectedUserProfile();
+        checkForRequests(id);
     }, [id]);
 
-    console.log("this is the datailed view of the person", userProfileData);
+    console.log("request notification ", reqNotifications, hasRequests);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -37,7 +41,6 @@ const ProfileView = () => {
 
     // Use the user's profile picture if available, otherwise use the default background image
 
-    
     const profilePictureUrl = userProfileData.profilePicture
         ? `http://localhost:8080/${userProfileData.profilePicture.replace(/\\/g, "/")}`
         : backgroundImage;
@@ -82,7 +85,6 @@ const ProfileView = () => {
                 }
             );
             alert(response.data.message);
-
             console.log(response.data);
         } catch (error) {
             if (error.response) {
@@ -169,13 +171,22 @@ const ProfileView = () => {
                     <button className={`${styles.footerButton} ${styles.starButton}`} onClick={handleShortList}>
                         ★
                     </button>
-                    <button className={`${styles.footerButton} ${styles.likeButton}`} onClick={handleRequestSend}>
+                    <button
+                        className={`${styles.footerButton} ${styles.likeButton}`}
+                        onClick={() => {
+                            if (hasRequests && reqNotifications.length > 0) {
+                                navigate("/received");
+                            } else {
+                                handleRequestSend();
+                            }
+                        }}
+                    >
+                        {hasRequests && reqNotifications.length > 0 && <span className={styles.greenDot}></span>}
                         <i className="fas fa-heart"></i>
                     </button>
+
                     {/* onClick={handleMessage} */}
-                    <button className={`${styles.footerButton} ${styles.chatButton}`} >
-                        💬
-                    </button>
+                    <button className={`${styles.footerButton} ${styles.chatButton}`}>💬</button>
                 </div>
             </div>
         </div>

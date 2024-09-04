@@ -21,7 +21,7 @@ const Header = ({ pageName }) => {
             <div className={styles.container}>
                 {!showBackArrow && (
                     <div className={styles.menuIcon}>
-                        <FaSearch className={styles.humburgeIcon} onClick={toggleModal} />
+                        <FaSearch className={styles.humburgeIcon}  />
                     </div>
                 )}
                 <div className={styles.headerName}>

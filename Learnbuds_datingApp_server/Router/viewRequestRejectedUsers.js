@@ -6,14 +6,15 @@ const authenticateToken = require("../Middlewares/jwtAuth");
 
 router.get("/api/rejected-request", authenticateToken, async (req, res) => {
     const userId = req.user;
+    console.log("Auth user id",userId);
     try {
         // Fetch the requests sent by the user
-        const requestRejectedUsers = await RequestModel.find({ sender: userId, status: "rejected" }).populate("receiver");
+        const requestRejectedUsers = await RequestModel.find({ receiver: userId, status: "rejected" }).populate("sender");
         console.log(requestRejectedUsers);
         // Fetch additional details from UserData model for each receiver
         const requestRejectedUsersData = await Promise.all(
             requestRejectedUsers.map(async (request) => {
-                const userData = await UserData.findOne({ userId: request.receiver._id });
+                const userData = await UserData.findOne({ userId: request.sender._id });
 
                 return {
                     requestId: request._id,
