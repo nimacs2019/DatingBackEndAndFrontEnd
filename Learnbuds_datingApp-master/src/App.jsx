@@ -48,6 +48,7 @@ import FilterPage from "./Pages/FilterPage/FilterPage";
 import PartnerPreference from "./Components/PartnerPreference/PartnerPreference";
 import { AuthProvider } from "./StateManagement/AuthContext";
 import { NotificationProvider } from "./StateManagement/NotificationContext";
+import { UsersProfileProvider } from "./StateManagement/UsersProfileContext";
 
 const App = () => {
     return (
@@ -55,55 +56,57 @@ const App = () => {
             <AuthProvider>
                 <ProfileProvider>
                     <ModalProvider>
-                        <BrowserRouter>
-                            <NotificationProvider>
-                                <Routes className="content">
-                                    <Route path="/" element={<LandingPage />} />
-                                    <Route path="/personalDetail" element={<PersonalDetail />} />
-                                    <Route path="/employement" element={<JobStatusComponent />} />
-                                    <Route path="/relationship-goals" element={<RelationshipGoals />} />
-                                    <Route path="/choose-app" element={<ChooseApp />} />
-    
-                                    <Route path="/userhome" element={<UserHomePage />} />
-                                    <Route path="/qualification" element={<Qualification />} />
-                                    <Route path="/location" element={<LocationPage />} />
-                                    <Route path="/designation" element={<DesignationPage />} />
-                                    <Route path="/matches" element={<MatchesPage />} />
-                                    <Route path="/upgradepopup" element={<UpgradePopup />} />
-                                    <Route path="/near-by-user" element={<NearByUser />} />
-    
-                                    <Route path="/profileview/:id" element={<ProfileView />} />
-                                    <Route path="/viewstory" element={<ViewStory />} />
-                                    <Route path="/settings" element={<Settings />} />
-                                    <Route path="/privacysettings" element={<PrivacySettings />} />
-                                    <Route path="/partner-preference" element={<PartnerPreference />} />
-                                    <Route path="/upgradeview" element={<UpgradeView />} />
-                                    <Route path="/myProfile" element={<OwnProfileView />} />
-                                    <Route path="/edit-myProfile" element={<EditMyProfile />} />
-                                    <Route path="/change-password" element={<ChangePassword />} />
-                                    <Route path="/filter" element={<FilterPage />} />
-    
-                                    <Route path="/sent" element={<Sent />} />
-                                    <Route path="/viewed-my-profile" element={<ViewedMyProfile />} />
-                                    <Route path="/accepted" element={<Accepted />} />
-                                    <Route path="/rejected" element={<Rejected />} />
-                                    <Route path="/received" element={<Received />} />
-                                    <Route path="/shortlisted" element={<Shortlisted />} />
-                                    <Route path="/shortlistedBy" element={<ShortlistedBy />} />
-                                    <Route path="/messages" element={<Messages />} />
-    
-                                    <Route path="/create-group" element={<CreateGroup />} />
-                                    <Route path="/group" element={<Groups />} />
-                                    <Route path="/subscriptionPlan" element={<SubscriptionPlan />} />
-                                    <Route path="/payment-method" element={<PaymentMethods />} />
-                                    <Route path="/addcard" element={<AddCards />} />
-    
-                                    <Route path="/404" element={<NotFound404 />} />
-                                    <Route path="/403" element={<NotFound403 />} />
-                                </Routes>
-                            </NotificationProvider>
-                            <RightSideModal />
-                        </BrowserRouter>
+                        <UsersProfileProvider>
+                            <BrowserRouter>
+                                <NotificationProvider>
+                                    <Routes className="content">
+                                        <Route path="/" element={<LandingPage />} />
+                                        <Route path="/personalDetail" element={<PersonalDetail />} />
+                                        <Route path="/employement" element={<JobStatusComponent />} />
+                                        <Route path="/relationship-goals" element={<RelationshipGoals />} />
+                                        <Route path="/choose-app" element={<ChooseApp />} />
+        
+                                        <Route path="/userhome" element={<UserHomePage />} />
+                                        <Route path="/qualification" element={<Qualification />} />
+                                        <Route path="/location" element={<LocationPage />} />
+                                        <Route path="/designation" element={<DesignationPage />} />
+                                        <Route path="/matches" element={<MatchesPage />} />
+                                        <Route path="/upgradepopup" element={<UpgradePopup />} />
+                                        <Route path="/near-by-user" element={<NearByUser />} />
+        
+                                        <Route path="/profileview/:id" element={<ProfileView />} />
+                                        <Route path="/viewstory" element={<ViewStory />} />
+                                        <Route path="/settings" element={<Settings />} />
+                                        <Route path="/privacysettings" element={<PrivacySettings />} />
+                                        <Route path="/partner-preference" element={<PartnerPreference />} />
+                                        <Route path="/upgradeview" element={<UpgradeView />} />
+                                        <Route path="/myProfile" element={<OwnProfileView />} />
+                                        <Route path="/edit-myProfile" element={<EditMyProfile />} />
+                                        <Route path="/change-password" element={<ChangePassword />} />
+                                        <Route path="/filter" element={<FilterPage />} />
+        
+                                        <Route path="/sent" element={<Sent />} />
+                                        <Route path="/viewed-my-profile" element={<ViewedMyProfile />} />
+                                        <Route path="/accepted" element={<Accepted />} />
+                                        <Route path="/rejected" element={<Rejected />} />
+                                        <Route path="/received" element={<Received />} />
+                                        <Route path="/shortlisted" element={<Shortlisted />} />
+                                        <Route path="/shortlistedBy" element={<ShortlistedBy />} />
+                                        <Route path="/messages" element={<Messages />} />
+        
+                                        <Route path="/create-group" element={<CreateGroup />} />
+                                        <Route path="/group" element={<Groups />} />
+                                        <Route path="/subscriptionPlan" element={<SubscriptionPlan />} />
+                                        <Route path="/payment-method" element={<PaymentMethods />} />
+                                        <Route path="/addcard" element={<AddCards />} />
+        
+                                        <Route path="/404" element={<NotFound404 />} />
+                                        <Route path="/403" element={<NotFound403 />} />
+                                    </Routes>
+                                </NotificationProvider>
+                                <RightSideModal />
+                            </BrowserRouter>
+                        </UsersProfileProvider>
                     </ModalProvider>
                 </ProfileProvider>
             </AuthProvider>

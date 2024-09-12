@@ -5,14 +5,18 @@ import upgradeView from "../UpgradeView/UpgradeView";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { NotificationContext } from "../../StateManagement/NotificationContext";
+import { addToChatList } from "../../Pages/Messages/ChatRequest";
+import { MdChat } from "react-icons/md";
+import { UsersProfileContext } from "../../StateManagement/UsersProfileContext";
 
 const ProfileView = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [hiddenUsers, setHiddenUsers] = useState([]);
     const [userProfileData, setUserProfileData] = useState(null);
-    const { setReqNotifications, reqNotifications, setHasRequests, hasRequests, checkForRequests } =
-        useContext(NotificationContext);
+    const { hideProfile } = useContext(UsersProfileContext);
+    const { reqNotifications, hasRequests, checkForRequests } = useContext(NotificationContext);
 
     const getSelectedUserProfile = async () => {
         try {
@@ -25,9 +29,25 @@ const ProfileView = () => {
         }
     };
 
+    const recordProfileView = async () => {
+        try {
+            await axios.post(
+                "http://localhost:8080/api/user/record-viewProfile",
+
+                {
+                    viewedUserId: id,
+                },
+                { withCredentials: true }
+            );
+        } catch (error) {
+            console.error("Error recording profile view:", error.message);
+        }
+    };
+
     useEffect(() => {
         getSelectedUserProfile();
         checkForRequests(id);
+        recordProfileView();
     }, [id]);
 
     console.log("request notification ", reqNotifications, hasRequests);
@@ -47,6 +67,24 @@ const ProfileView = () => {
 
     const handleBackClick = () => {
         navigate(-1); // Navigates back to the previous page
+    };
+
+    const handleDoNotShow = async () => {
+        try {
+            await axios.post(
+                "http://localhost:8080/api/do-not-show",
+                { hide_id: id },
+                {
+                    withCredentials: true,
+                }
+            );
+
+            hideProfile(id);
+            alert("User hidden successfully");
+        } catch (error) {
+            console.error("Error hiding the user profile:", error);
+            alert("Error: Unable to hide the user profile");
+        }
     };
 
     const handleShortList = async () => {
@@ -94,16 +132,16 @@ const ProfileView = () => {
         }
     };
 
-    // const handleMessage = async () => {
-    //     try {
-    //         const response = await addToChatList({ receiverId: id });
-    //         console.log("User added to chat list:", response.data);
-    //         navigate(`/chat-application`);
-    //     } catch (error) {
-    //         console.error("Error adding user to chat list:", error);
-    //         alert("Error: Unable to add the user to chat list");
-    //     }
-    // };
+    const handleMessage = async () => {
+        try {
+            const response = await addToChatList({ receiverId: id });
+            console.log("User added to chat list:", response.data);
+            navigate(`/messages`);
+        } catch (error) {
+            console.error("Error adding user to chat list:", error);
+            alert("Error: Unable to add the user to chat list");
+        }
+    };
 
     return (
         <div
@@ -165,7 +203,7 @@ const ProfileView = () => {
                 </div>
 
                 <div className={styles.footerContainer}>
-                    <button className={`${styles.footerButton} ${styles.dislikeButton}`} onClick={handleBackClick}>
+                    <button className={`${styles.footerButton} ${styles.dislikeButton}`} onClick={handleDoNotShow}>
                         X
                     </button>
                     <button className={`${styles.footerButton} ${styles.starButton}`} onClick={handleShortList}>
@@ -185,8 +223,9 @@ const ProfileView = () => {
                         <i className="fas fa-heart"></i>
                     </button>
 
-                    {/* onClick={handleMessage} */}
-                    <button className={`${styles.footerButton} ${styles.chatButton}`}>💬</button>
+                    <button className={`${styles.footerButton} ${styles.chatButton}`} onClick={handleMessage}>
+                        <MdChat />
+                    </button>
                 </div>
             </div>
         </div>

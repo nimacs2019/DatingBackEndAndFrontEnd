@@ -6,11 +6,13 @@ import styles from "./profiles.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ProfileContext } from "../../StateManagement/ProfileContext";
+import { UsersProfileContext } from "../../StateManagement/UsersProfileContext";
 
 const Profiles = ({ activeFilter }) => {
     const { profileData } = useContext(ProfileContext);
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { profiles, setProfiles, hiddenProfiles } = useContext(UsersProfileContext);
 
     const navigate = useNavigate();
 
@@ -18,7 +20,7 @@ const Profiles = ({ activeFilter }) => {
         const fetchUserData = async () => {
             try {
                 const userResponse = await axios.get("http://localhost:8080/api/user-details", { withCredentials: true });
-                setUsers(userResponse.data);
+                setProfiles(userResponse.data);
                 setIsLoading(false);
             } catch (error) {
                 console.error("Error fetching data", error);
@@ -30,21 +32,37 @@ const Profiles = ({ activeFilter }) => {
 
     const filterUsers = (users) => {
         if (!profileData) return [];
+
+        // switch (activeFilter) {
+        //     case "nearby":
+        //         return users.filter((user) => user.dist === profileData.dist && user._id !== profileData._id);
+        //     case "education":
+        //         return users.filter((user) => user.job === profileData.job && user._id !== profileData._id);
+        //     case "qualification":
+        //         return users.filter(
+        //             (user) => user.qualification === profileData.qualification && user._id !== profileData._id
+        //         );
+        //     default:
+        //         return users;
+        // }
+
+        const visibleUsers = users.filter((user) => !hiddenProfiles.includes(user._id));
+
         switch (activeFilter) {
             case "nearby":
-                return users.filter((user) => user.dist === profileData.dist && user._id !== profileData._id);
+                return visibleUsers.filter((user) => user.dist === profileData.dist && user._id !== profileData._id);
             case "education":
-                return users.filter((user) => user.job === profileData.job && user._id !== profileData._id);
+                return visibleUsers.filter((user) => user.job === profileData.job && user._id !== profileData._id);
             case "qualification":
-                return users.filter(
+                return visibleUsers.filter(
                     (user) => user.qualification === profileData.qualification && user._id !== profileData._id
                 );
             default:
-                return users;
+                return visibleUsers;
         }
     };
 
-    const filteredUsers = filterUsers(users);
+    const filteredUsers = filterUsers(profiles);
 
     if (isLoading) {
         return <div>Loading...</div>;

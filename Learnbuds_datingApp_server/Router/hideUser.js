@@ -4,14 +4,16 @@ const User = require("../database/dating_models/userDataSchema");
 const authenticateToken = require("../Middlewares/jwtAuth");
 
 router.post('/api/do-not-show', authenticateToken, async (req, res) => {
-    const { hide_Id } = req.body;
+    const { hide_id } = req.body;
+    console.log("555555555555",hide_id);
+    
     const userId = req.user; 
 
     if (!userId) {
         return res.status(400).json({ error: 'User ID is required' });
     }
 
-    if (!hide_Id) {
+    if (!hide_id) {
         return res.status(400).json({ error: 'Hide ID is required' });
     }
     
@@ -25,8 +27,8 @@ router.post('/api/do-not-show', authenticateToken, async (req, res) => {
             user.doNotShow = [];
         }
 
-        if (!user.doNotShow.includes(hide_Id)) {
-            user.doNotShow.push(hide_Id);
+        if (!user.doNotShow.includes(hide_id)) {
+            user.doNotShow.push(hide_id);
             await user.save();
         }
 

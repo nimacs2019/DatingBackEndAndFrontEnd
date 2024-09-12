@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaHeart } from "react-icons/fa";
 import styles from "./Messages.module.css";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
+import ChatInterface from "./ChatInterface/ChatInterface";
+import Chats from "./Chats/Chats";
+import axios from "axios";
+import { io } from "socket.io-client";
+import { userChats } from "./ChatRequest";
 
 const contacts = [
     {
@@ -50,12 +55,80 @@ const contacts = [
 ];
 
 const Messages = () => {
+    const [chats, setChats] = useState([]);
+    const [user, setUser] = useState();
+    const [loading, setLoading] = useState(true);
+    const [currentChat, setCurrentChat] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [sendMessage, setSendMessage] = useState(null);
+    const [receivedMessage, setReceivedMessage] = useState(null);
+
+    const socket = useRef(null);
+
+    useEffect(() => {
+        const getProfileAndChats = async () => {
+            try {
+                // Fetch user profile data
+                const profileResponse = await axios.get("http://localhost:8080/api/my-profile", { withCredentials: true });
+                const profileData = profileResponse.data;
+                setUser(profileData);
+                console.log(profileData);
+
+                // Fetch chat data using the profile data
+                if (profileData?.userId) {
+                    const chatsResponse = await userChats(profileData.userId);
+                    setChats(chatsResponse.data);
+                    console.log(chatsResponse.data);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getProfileAndChats();
+    }, []);
+
+    // Connect to Socket.io
+    useEffect(() => {
+        if (user?.userId) {
+            socket.current = io("http://localhost:8000");
+            socket.current.emit("new-user-add", user.userId);
+            socket.current.on("get-users", (users) => {
+                setOnlineUsers(users);
+                console.log(onlineUsers);
+            });
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (socket.current) {
+            socket.current.on("receive-message", (data) => {
+                console.log(data);
+                setReceivedMessage(data);
+            });
+        }
+    }, []);
+
+    // sending message to socket server
+    useEffect(() => {
+        if (sendMessage !== null) {
+            socket.current.emit("send-message", sendMessage);
+        }
+    }, [sendMessage]);
+
+    // receive message from socket server
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <>
-        <Header pageName="Message"/>
-        <div>
+            <Header pageName="Message" />
             <div className={styles.recentMatches}>
-                <h2>Recent Matches</h2>
+                <h2 style={{ color: "white" }}>Recent Matches</h2>
                 <div className={styles.recentMatchesList}>
                     {contacts.slice(0, 6).map((contact, index) => (
                         <div key={index} className={styles.recentMatchItem}>
@@ -72,27 +145,36 @@ const Messages = () => {
                     ))}
                 </div>
             </div>
+            {/* <div className={styles.app}> */}
+            <div className={styles.Chat}>
+                {/* Left Side */}
 
-            <div className={styles.app}>
-                <div className={styles.contactList}>
-                    {contacts.map((contact, index) => (
-                        <div key={index} className={styles.contactItem}>
-                            <img src={contact.imgSrc} alt={contact.name} className={styles.contactImg} />
-                            <div className={styles.contactInfo}>
-                                <p className={styles.contactName}>{contact.name}</p>
-                                <p className={styles.contactMessage}>Last message preview...</p>
-                            </div>
-                            <div className={styles.contactRightSide}>
-                                <div className={styles.contactDot}></div>
-                                <div className={styles.contactTime}>09:30</div>
-                            </div>
+                <div className={styles.LeftSideChat}>
+                    <div className={styles.ChatContainer}>
+                        <h2>Chats</h2>
+                        <div className={styles.ChatList}>
+                            {chats.map((chat) => (
+                                <div key={chat._id} onClick={() => setCurrentChat(chat)} className={styles.Conversation}>
+                                    <Chats data={chat} currentUserID={user.userId} />
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+                </div>
+
+                {/* Right Side */}
+                <div className={styles.RightSideChat}>
+                    <ChatInterface
+                        chat={currentChat}
+                        currentUser={user}
+                        setSendMessage={setSendMessage}
+                        receivedMessage={receivedMessage}
+                    />
                 </div>
             </div>
-        </div>
-        <Footer />
-    </>);
+            {/* <Footer /> */}
+        </>
+    );
 };
 
 export default Messages;

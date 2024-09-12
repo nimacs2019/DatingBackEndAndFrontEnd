@@ -7,12 +7,10 @@ import axios from "axios";
 import { NotificationContext } from "../../StateManagement/NotificationContext";
 
 const groupContacts = (contacts) => {
-    const sortedContacts = contacts
-        .filter((contact) => contact.name) 
-        .sort((a, b) => a.name.localeCompare(b.name)); 
+    const sortedContacts = contacts.filter((contact) => contact.name).sort((a, b) => a.name.localeCompare(b.name));
 
     return sortedContacts.reduce((acc, contact) => {
-        const firstLetter = contact.name.charAt(0).toUpperCase(); 
+        const firstLetter = contact.name.charAt(0).toUpperCase();
         if (!acc[firstLetter]) {
             acc[firstLetter] = [];
         }
@@ -24,7 +22,6 @@ const groupContacts = (contacts) => {
 const Received = () => {
     const [users, setUsers] = useState([]);
     const { reqNotifications, hasRequests, checkForRequests } = useContext(NotificationContext);
-
 
     const getReceivedRequests = async () => {
         try {
@@ -53,14 +50,13 @@ const Received = () => {
     useEffect(() => {
         getReceivedRequests();
     }, []);
-    console.log("hdhfsjhd",users);
-    
+    console.log("hdhfsjhd", users);
 
-    const handleAcceptRequest = async (userId ) => {
+    const handleAcceptRequest = async (userId) => {
         try {
             const response = await axios.post(
                 `http://localhost:8080/api/accept-request`,
-                { senderID: userId  },
+                { senderID: userId },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -82,11 +78,11 @@ const Received = () => {
         }
     };
 
-    const handleRejectRequest = async (userId ) => {
+    const handleRejectRequest = async (userId) => {
         try {
             const response = await axios.post(
                 `http://localhost:8080/api/reject-request`,
-                { senderID: userId  },
+                { senderID: userId },
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -115,31 +111,41 @@ const Received = () => {
             <Header pageName="Received" />{" "}
             <div className={styles.app}>
                 <div className={styles.contactList}>
-                    {Object.keys(groupedContacts).map((letter) => (
-                        <div key={letter} className={styles.contactGroup}>
-                            <div className={styles.contactGroupLetter}>{letter}</div>
-                            {groupedContacts[letter].map((contact, index) => (
-                                <div key={index} className={styles.contactItem}>
-                                    <img
-                                        src={`http://localhost:8080/${contact.profilePicture}` || "default-img-url"}
-                                        alt={contact.name || "No Name"}
-                                        className={styles.contactImg}
-                                    />{" "}
-                                    <div className={styles.contactInfo}>
-                                        <p className={styles.contactName}>{contact.name}</p>
-                                        <p className={styles.contactDate}>
-                                            {new Date(contact.updatedAt).toLocaleDateString() || "No Date"}
-                                        </p>{" "}
+                    {Object.keys(groupedContacts).length === 0 ? (
+                        <p>No one has viewed your profile yet.</p>
+                    ) : (
+                        Object.keys(groupedContacts).map((letter) => (
+                            <div key={letter} className={styles.contactGroup}>
+                                <div className={styles.contactGroupLetter}>{letter}</div>
+                                {groupedContacts[letter].map((contact, index) => (
+                                    <div key={index} className={styles.contactItem}>
+                                        <img
+                                            src={`http://localhost:8080/${contact.profilePicture}` || "default-img-url"}
+                                            alt={contact.name || "No Name"}
+                                            className={styles.contactImg}
+                                        />{" "}
+                                        <div className={styles.contactInfo}>
+                                            <p className={styles.contactName}>{contact.name}</p>
+                                            <p className={styles.contactDate}>
+                                                {new Date(contact.updatedAt).toLocaleDateString() || "No Date"}
+                                            </p>{" "}
+                                        </div>
+                                        <div className={styles.contactActions}>
+                                            <FaHeart
+                                                className={styles.heartIcon}
+                                                onClick={() => handleAcceptRequest(contact.userId)}
+                                            />
+                                            &nbsp;&nbsp;
+                                            <FaTimes
+                                                className={styles.closeIcon}
+                                                onClick={() => handleRejectRequest(contact.userId)}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className={styles.contactActions}>
-                                        <FaHeart className={styles.heartIcon} onClick={() => handleAcceptRequest(contact.userId)}/>
-                                        &nbsp;&nbsp;
-                                        <FaTimes className={styles.closeIcon} onClick={() => handleRejectRequest(contact.userId)}/>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+                                ))}
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
             <Footer />

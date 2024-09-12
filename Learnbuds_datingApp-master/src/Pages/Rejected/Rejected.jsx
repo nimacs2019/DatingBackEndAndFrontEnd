@@ -50,28 +50,33 @@ const Rejected = () => {
             <Header pageName="Rejected" />{" "}
             <div className={styles.app}>
                 <div className={styles.contactList}>
-                    {Object.keys(groupedContacts).map((letter) => (
-                        <div key={letter} className={styles.contactGroup}>
-                            <div className={styles.contactGroupLetter}>{letter}</div>
-                            {groupedContacts[letter].map((contact, index) => (
-                                <div key={index} className={styles.contactItem}>
-                                    <img
-                                        src={
-                                            `http://localhost:8080/${contact.receiver.profilePicture}` || "default-img-url"
-                                        }
-                                        alt={contact.name || "No Name"}
-                                        className={styles.contactImg}
-                                    />{" "}
-                                    <div className={styles.contactInfo}>
-                                        <p className={styles.contactName}>{contact.receiver.name || "Unknown"}</p>
-                                        <p className={styles.contactDate}>
-                                            {new Date(contact.updatedAt).toLocaleDateString() || "No Date"}
-                                        </p>
+                    {Object.keys(groupedContacts).length === 0 ? (
+                        <p>No one has viewed your profile yet.</p>
+                    ) : (
+                        Object.keys(groupedContacts).map((letter) => (
+                            <div key={letter} className={styles.contactGroup}>
+                                <div className={styles.contactGroupLetter}>{letter}</div>
+                                {groupedContacts[letter].map((contact, index) => (
+                                    <div key={index} className={styles.contactItem}>
+                                        <img
+                                            src={
+                                                `http://localhost:8080/${contact.receiver.profilePicture}` ||
+                                                "default-img-url"
+                                            }
+                                            alt={contact.name || "No Name"}
+                                            className={styles.contactImg}
+                                        />{" "}
+                                        <div className={styles.contactInfo}>
+                                            <p className={styles.contactName}>{contact.receiver.name || "Unknown"}</p>
+                                            <p className={styles.contactDate}>
+                                                {new Date(contact.updatedAt).toLocaleDateString() || "No Date"}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
+                                ))}
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
             <Footer />

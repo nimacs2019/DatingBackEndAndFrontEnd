@@ -29,7 +29,18 @@ const userDataSchema = new mongoose.Schema(
             type: [String],
             default: [],
         },
-    },
+        viewedMyProfile: [
+            {
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User",
+                },
+                viewedAt: {
+                    type: Date,
+                    default: Date.now,
+                },
+            },
+        ],    },
     { timestamps: true }
 );
 

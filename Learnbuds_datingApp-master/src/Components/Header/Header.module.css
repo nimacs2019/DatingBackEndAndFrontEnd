@@ -60,6 +60,19 @@
     font-size: 1.2rem;
     cursor: pointer;
 }
+.searchForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchInput {
+    width: 150px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
 
 @media (min-width: 992px) {
     .headerContainer {

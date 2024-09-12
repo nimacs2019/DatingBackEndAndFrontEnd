@@ -5,8 +5,6 @@ import { FaPhone, FaVideo } from "react-icons/fa";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
 
-
-
 const Accepted = () => {
     const [users, setUsers] = useState([]);
 
@@ -39,23 +37,27 @@ const Accepted = () => {
             <div className={styles.app}>
                 <div className={styles.contactList}>
                     <div className={styles.contactListContent}>
-                        {users.map((user, index) => (
-                            <div key={index} className={styles.contactItem}>
-                                <img
+                        {users.length === 0 ? (
+                            <p>No one has viewed your profile yet.</p>
+                        ) : (
+                            users.map((user, index) => (
+                                <div key={index} className={styles.contactItem}>
+                                    <img
                                         src={`http://localhost:8080/${user.receiver.profilePicture}` || "default-img-url"}
                                         alt={user.receiver.name || "No Name"}
                                         className={styles.contactImg}
                                     />{" "}
-                                <div className={styles.contactInfo}>
-                                    <p className={styles.contactName}>{user.receiver.name}</p>
-                                    <p className={styles.contactDate}>{user.receiver.date}</p>
+                                    <div className={styles.contactInfo}>
+                                        <p className={styles.contactName}>{user.receiver.name}</p>
+                                        <p className={styles.contactDate}>{user.receiver.date}</p>
+                                    </div>
+                                    <div className={styles.contactActions}>
+                                        <FaPhone className={styles.callIcon} />
+                                        <FaVideo className={styles.videoIcon} />
+                                    </div>
                                 </div>
-                                <div className={styles.contactActions}>
-                                    <FaPhone className={styles.callIcon} />
-                                    <FaVideo className={styles.videoIcon} />
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
