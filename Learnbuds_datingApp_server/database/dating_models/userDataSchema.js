@@ -25,10 +25,14 @@ const userDataSchema = new mongoose.Schema(
         profilePicture: String,
         moreImages: [String],
         reels: [String],
-        doNotShow: {
-            type: [String],
-            default: [],
-        },
+        doNotShow: [
+            {
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User",
+                },
+            },
+        ],
         viewedMyProfile: [
             {
                 userId: {
@@ -40,7 +44,8 @@ const userDataSchema = new mongoose.Schema(
                     default: Date.now,
                 },
             },
-        ],    },
+        ],
+    },
     { timestamps: true }
 );
 

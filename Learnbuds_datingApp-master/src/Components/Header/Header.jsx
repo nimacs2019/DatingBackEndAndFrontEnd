@@ -9,8 +9,8 @@ const Header = ({ pageName, onSearch }) => {
     const { toggleModal } = useContext(ModalContext);
     const navigate = useNavigate();
     const searchInputRef = useRef(null);
-    const [searchTerm, setSearchTerm] = useState(""); // State for the search input
-    const [showSearchInput, setShowSearchInput] = useState(false); // State to show/hide the search input
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showSearchInput, setShowSearchInput] = useState(false);
 
     const handleBackClick = () => {
         navigate(-1);
@@ -23,13 +23,13 @@ const Header = ({ pageName, onSearch }) => {
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (onSearch) {
-            onSearch(searchTerm); // Trigger the search callback with the entered term
+            onSearch(searchTerm);
             setSearchTerm("");
         }
     };
 
     const toggleSearchInput = () => {
-        setShowSearchInput((prev) => !prev); // Toggle the search input visibility
+        setShowSearchInput((prev) => !prev);
     };
     useEffect(() => {
         if (showSearchInput && searchInputRef.current) {

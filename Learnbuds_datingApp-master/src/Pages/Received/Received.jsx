@@ -21,6 +21,7 @@ const groupContacts = (contacts) => {
 
 const Received = () => {
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(""); 
     const { reqNotifications, hasRequests, checkForRequests } = useContext(NotificationContext);
 
     const getReceivedRequests = async () => {
@@ -104,12 +105,18 @@ const Received = () => {
         }
     };
 
-    const groupedContacts = groupContacts(users);
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Group filtered users by the first letter of their name
+    const groupedContacts = groupContacts(filteredUsers);
 
     return (
         <>
-            <Header pageName="Received" />{" "}
+            <Header pageName="Received" onSearch={(term) => setSearchTerm(term)}/>{" "}
             <div className={styles.app}>
+            <div className={styles.line}></div>
                 <div className={styles.contactList}>
                     {Object.keys(groupedContacts).length === 0 ? (
                         <p>No one has viewed your profile yet.</p>

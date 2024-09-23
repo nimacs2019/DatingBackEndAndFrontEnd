@@ -1,10 +1,12 @@
-.app {
+/* .app {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
     overflow: hidden;
-}
+    background-color: #4b2354;
+
+} */
 
 .contactImgContainer {
     position: relative;
@@ -46,43 +48,6 @@
     opacity: 1;
 }
 
-/* .recentMatchImg {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-}
-
-.recentMatches {
-    align-items: center;
-    background-color: #4b2354;
-    color: white;
-    padding: 1rem;
-    font-size: 15px;
-    position: fixed;
-    height: 230px;
-    top: 9rem;
-    width: 100%;
-    transition: all 0.3s ease;
-    margin-bottom: 2rem;
-}
-
-.recentMatches h2 {
-    margin-bottom: 1rem;
-    margin-left: 2rem;
-    font-size: 18px;
-    padding: 1rem 0;
-}
-
-.recentMatchesList {
-    display: flex;
-    overflow-x: auto;
-    margin-left: 2rem;
-    scrollbar-width: none;
-}
-
-.recentMatchItem {
-    margin-right: 1rem;
-} */
 
 .contactList {
     flex-grow: 1;

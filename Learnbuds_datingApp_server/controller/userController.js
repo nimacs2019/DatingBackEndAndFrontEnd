@@ -34,8 +34,10 @@ const recordViewedMyProfile = async (req, res) => {
         );
 
         // Check if the user was found and updated
-        if (updateResult.modifiedCount === 0) {
-            return res.status(404).json({ message: "User not found or profile view already recorded" });
+        if (updateResult.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        } else if (updateResult.modifiedCount === 0) {
+            return res.status(200).json({ message: "Profile view already recorded" });
         }
 
         res.status(200).json({ message: "Profile view recorded successfully" });
@@ -44,6 +46,7 @@ const recordViewedMyProfile = async (req, res) => {
         res.status(500).json({ message: "Error recording profile view", error: error.message });
     }
 };
+
 
 const getViewedMyProfile = async (req, res) => {
     const loggedInUserId = req.user; // Assuming `req.user` contains the logged-in user's ID

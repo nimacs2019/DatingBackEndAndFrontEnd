@@ -1,7 +1,17 @@
 
-.app {
+/* .app {
     display: flex;
     align-items: center;
+    overflow: hidden;
+    background-color: #4b2354;
+
+} */
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
     overflow: hidden;
 }
 .Chat {
@@ -9,10 +19,25 @@
     height: 100vh;
     position: relative;
     padding: 1rem;
+    margin: auto;
+    width: 100vw;
     top: 21rem;
     z-index: 1000;
     border-radius: 50px 50px 0 0;
     background-color: #ebe5e7;
+    overflow-y: auto;  
+    max-height: calc(100vh - 0); 
+}
+.line {
+    position: relative;
+    top: 11rem;
+    width: 40px;
+    height: 4px;
+    background-color: rgb(147, 146, 146);
+    border-radius: 2px;
+    margin: 0 auto;
+    margin-top: 10px;
+    z-index: 1000;
 }
 
 .LeftSideChat,
@@ -86,13 +111,7 @@
     }
 }
 
-/* .app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-} */
+
 
 .contactImgContainer {
     position: relative;
@@ -138,6 +157,7 @@
     width: 80px;
     height: 80px;
     border-radius: 10px;
+    
 }
 
 .recentMatches {

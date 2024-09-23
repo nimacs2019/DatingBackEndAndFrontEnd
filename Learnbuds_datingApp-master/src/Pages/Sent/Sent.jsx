@@ -21,6 +21,7 @@ const groupContacts = (contacts) => {
 
 const Sent = () => {
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(""); 
 
     const getRequestSentUser = async () => {
         try {
@@ -44,11 +45,16 @@ const Sent = () => {
         getRequestSentUser();
     }, []);
 
-    const groupedContacts = groupContacts(users);
+    const filteredUsers = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Group filtered users by the first letter of their name
+    const groupedContacts = groupContacts(filteredUsers);
 
     return (
         <>
-            <Header pageName="Sent" />
+            <Header pageName="Sent" onSearch={(term) => setSearchTerm(term)}/>
             <div className={styles.app}>
             <div className={styles.line}></div>
                 <div className={styles.contactList}>

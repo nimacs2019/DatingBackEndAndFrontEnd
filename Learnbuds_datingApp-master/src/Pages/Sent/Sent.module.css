@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
+    background-color: #4b2354;
+
 }
 .line {
     position: relative;

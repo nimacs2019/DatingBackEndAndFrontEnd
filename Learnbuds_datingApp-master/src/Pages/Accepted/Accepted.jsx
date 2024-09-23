@@ -7,6 +7,7 @@ import Footer from "../../Components/Footer/Footer";
 
 const Accepted = () => {
     const [users, setUsers] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const getAcceptedRequest = async (req, res) => {
         try {
@@ -31,16 +32,22 @@ const Accepted = () => {
     useEffect(() => {
         getAcceptedRequest();
     }, []);
+
+    // Filter users based on the search term (case-insensitive)
+    const filteredUsers = users.filter((user) =>
+        user.receiver.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
     return (
         <>
-            <Header pageName="Accepted" />{" "}
+            <Header pageName="Accepted" onSearch={(term) => setSearchTerm(term)} />{" "}
             <div className={styles.app}>
+            <div className={styles.line}></div>
                 <div className={styles.contactList}>
                     <div className={styles.contactListContent}>
-                        {users.length === 0 ? (
+                        {filteredUsers.length === 0 ? (
                             <p>No one has viewed your profile yet.</p>
                         ) : (
-                            users.map((user, index) => (
+                            filteredUsers.map((user, index) => (
                                 <div key={index} className={styles.contactItem}>
                                     <img
                                         src={`http://localhost:8080/${user.receiver.profilePicture}` || "default-img-url"}

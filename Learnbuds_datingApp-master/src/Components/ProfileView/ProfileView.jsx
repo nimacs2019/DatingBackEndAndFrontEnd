@@ -71,13 +71,7 @@ const ProfileView = () => {
 
     const handleDoNotShow = async () => {
         try {
-            await axios.post(
-                "http://localhost:8080/api/do-not-show",
-                { hide_id: id },
-                {
-                    withCredentials: true,
-                }
-            );
+            await axios.post("http://localhost:8080/api/do-not-show", { hide_id: id }, { withCredentials: true });
 
             hideProfile(id);
             alert("User hidden successfully");

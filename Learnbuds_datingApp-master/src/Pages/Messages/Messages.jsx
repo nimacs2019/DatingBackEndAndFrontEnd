@@ -127,52 +127,57 @@ const Messages = () => {
     return (
         <>
             <Header pageName="Message" />
-            <div className={styles.recentMatches}>
-                <h2 style={{ color: "white" }}>Recent Matches</h2>
-                <div className={styles.recentMatchesList}>
-                    {contacts.slice(0, 6).map((contact, index) => (
-                        <div key={index} className={styles.recentMatchItem}>
-                            <div className={styles.contactImgContainer}>
-                                <img src={contact.imgSrc} alt={contact.name} className={styles.recentMatchImg} />
-                                <div className={styles.overlayContainer}>
-                                    <div className={styles.heartIcon}>
-                                        <FaHeart />
+            <div className={styles.app}>
+                <div className={styles.recentMatches}>
+                    <h2 style={{ color: "white" }}>Recent Matches</h2>
+                    <div className={styles.recentMatchesList}>
+                        {contacts.slice(0, 6).map((contact, index) => (
+                            <div key={index} className={styles.recentMatchItem}>
+                                <div className={styles.contactImgContainer}>
+                                    <img src={contact.imgSrc} alt={contact.name} className={styles.recentMatchImg} />
+                                    <div className={styles.overlayContainer}>
+                                        <div className={styles.heartIcon}>
+                                            <FaHeart />
+                                        </div>
+                                        <div className={styles.likeCount}>{contact.likes}</div>
                                     </div>
-                                    <div className={styles.likeCount}>{contact.likes}</div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            {/* <div className={styles.app}> */}
-            <div className={styles.Chat}>
-                {/* Left Side */}
-
-                <div className={styles.LeftSideChat}>
-                    <div className={styles.ChatContainer}>
-                        <h2>Chats</h2>
-                        <div className={styles.ChatList}>
-                            {chats.map((chat) => (
-                                <div key={chat._id} onClick={() => setCurrentChat(chat)} className={styles.Conversation}>
-                                    <Chats data={chat} currentUserID={user.userId} />
-                                </div>
-                            ))}
-                        </div>
+                        ))}
                     </div>
                 </div>
+                <div className={styles.Chat}>
+                    {/* Left Side */}
 
-                {/* Right Side */}
-                <div className={styles.RightSideChat}>
-                    <ChatInterface
-                        chat={currentChat}
-                        currentUser={user}
-                        setSendMessage={setSendMessage}
-                        receivedMessage={receivedMessage}
-                    />
+                    <div className={styles.LeftSideChat}>
+                        <div className={styles.ChatContainer}>
+                            <h2>Chats</h2>
+                            <div className={styles.ChatList}>
+                                {chats.map((chat) => (
+                                    <div
+                                        key={chat._id}
+                                        onClick={() => setCurrentChat(chat)}
+                                        className={styles.Conversation}
+                                    >
+                                        <Chats data={chat} currentUserID={user.userId} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Side */}
+                    <div className={styles.RightSideChat}>
+                        <ChatInterface
+                            chat={currentChat}
+                            currentUser={user}
+                            setSendMessage={setSendMessage}
+                            receivedMessage={receivedMessage}
+                        />
+                    </div>
                 </div>
             </div>
-            {/* <Footer /> */}
+            <Footer />
         </>
     );
 };

@@ -4,8 +4,20 @@
     align-items: center;
     height: 100vh;
     overflow: hidden;
-}
+    background-color: #4b2354;
 
+}
+.line {
+    position: relative;
+    top: 11rem;
+    width: 40px;
+    height: 4px;
+    background-color: rgb(147, 146, 146);
+    border-radius: 2px;
+    margin: 0 auto;
+    margin-top: 10px;
+    z-index: 1000;
+}
 .contactList {
     flex-grow: 1;
     width: 100%;

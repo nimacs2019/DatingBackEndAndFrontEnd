@@ -54,6 +54,7 @@ const ViewedMyProfile = () => {
                 onSearch={(term) => setSearchTerm(term)} // Update the search term
             />
             <div className={styles.app}>
+            <div className={styles.line}></div>
                 <div className={styles.contactList}>
                     {Object.keys(groupedContacts).length === 0 ? (
                         <div className={styles.noResultsContainer}>

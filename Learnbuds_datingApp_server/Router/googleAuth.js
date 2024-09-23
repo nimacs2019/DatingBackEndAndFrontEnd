@@ -24,8 +24,8 @@ router.get(
                 return res.status(404).json({ message: "Token not found" });
             }
 
-            console.log("Setting cookies for user:", user);
-            console.log("Generated Token:", token);
+            // console.log("Setting cookies for user:", user);
+            // console.log("Generated Token:", token);
 
             // Set the JWT token in a cookie
             res.cookie("jwt", token, {
